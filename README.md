@@ -14,7 +14,7 @@
 
 ## Overview
 
-Heavy-tailed movement steps ($\ell \sim \ell^{-\mu}$) across biology and ecology are routinely analyzed under the assumption that successive flights are independent. This repository implements a rigorous **dynamic maximum-entropy (Maximum Caliber)** framework for finite-order Markov chains of log-step lengths $x_t = \ln(\ell_t / \ell_{\min}) \in [0, L]$ ($L = \ln(\ell_{\max} / \ell_{\min})$) and turning directions $\mathbf{s}_t \in \mathbb{S}^{d-1}$, together with its extension to interacting multi-agent groups.
+Heavy-tailed movement steps ($\ell \sim \ell^{-\mu}$) across biology and ecology are routinely analyzed under the assumption that successive flights are independent. This repository implements a rigorous **dynamic maximum-entropy (Maximum Caliber)** framework for finite-order Markov chains of log-step lengths $x_t = \ln(\ell_t / \ell_{\min}) \in [0, L]$ (with dynamic range $L = \ln\ell_{\max} - \ln\ell_{\min}$) and turning directions $\mathbf{s}_t \in \mathbb{S}^{d-1}$, together with its extension to interacting multi-agent groups.
 
 <p align="center">
   <img src="paper/figs/fig1_overview.png" width="92%" alt="Dynamic MaxEnt Lévy Walk Overview and Phase Diagram"/>
@@ -22,40 +22,44 @@ Heavy-tailed movement steps ($\ell \sim \ell^{-\mu}$) across biology and ecology
 
 ### Key Theoretical & Empirical Results
 
-1. **Causal Dynamic-Entropy Factorization & Exact Heisenberg Response**:
-   Conditioning on the $K$-step history, the dynamic-entropy transition kernel on $[0, L]$ takes the exponential-family form
+#### 1. Causal Dynamic-Entropy Factorization & Exact Heisenberg Response
 
-   $$
-   P(x_t \mid x_{t-1}, \dots, x_{t-K}) = \frac{1}{Z(\theta_t, \beta)} \exp\left(\theta_t x_t - \beta x_t^2\right), \qquad \theta_t = h_i + \sum_{\tau=1}^K J_\tau (x_{t-\tau} - c).
-   $$
+Conditioning on the $K$-step history, the dynamic-entropy transition kernel on $[0, L]$ takes the exponential-family form
 
-   In the pure power-law regime ($\beta = 0$), the bare field maps to the Pareto exponent via $h = 1 - \mu_{\mathrm{bare}}$, the log-partition function is closed-form, and the conditional mean step is governed by the classical **Heisenberg-spin Langevin function** $\mathcal{L}(u) = \coth u - 1/u$:
+$$
+P(x_t \mid x_{t-1}, \dots, x_{t-K}) = \frac{1}{Z(\theta_t, \beta)} \exp\left(\theta_t x_t - \beta x_t^2\right), \qquad \theta_t = h_i + \sum_{\tau=1}^K J_\tau (x_{t-\tau} - c).
+$$
 
-   $$
-   \langle x_t \rangle_{\theta_t} = \frac{L}{2}\left[1 + \mathcal{L}\left(\frac{\theta_t L}{2}\right)\right], \qquad \mathrm{Var}(x_t)_{\theta_t} = \frac{L^2}{4\sinh^2(\theta_t L / 2)} - \frac{1}{\theta_t^2}.
-   $$
+In the pure power-law regime ($\beta = 0$), the bare field maps to the Pareto exponent via $h = 1 - \mu_{\mathrm{bare}}$, the log-partition function is closed-form, and the conditional mean step is governed by the classical **Heisenberg-spin Langevin function** $\mathcal{L}(u) = \coth u - 1/u$:
 
-2. **First-Order Condensation Transition & Exponent Dressing ($K = 1$)**:
-   The one-step chain is exactly solvable via a self-adjoint Hilbert–Schmidt transfer operator, yielding the explicit stationary marginal $\pi(x) \propto e^{h x} Z(h + J_1 x)$ and a **self-dual coexistence line** $h + \frac{1}{2} J_1 L = 0$, equivalently expressed through the dimensionless control parameter
+$$
+\langle x_t \rangle_{\theta_t} = \frac{L}{2}\left[1 + \mathcal{L}\left(\frac{\theta_t L}{2}\right)\right], \qquad \mathrm{Var}(x_t)_{\theta_t} = \frac{L^2}{4\sinh^2(\theta_t L / 2)} - \frac{1}{\theta_t^2}.
+$$
 
-   $$
-   \Phi \equiv \frac{J_1 L}{\mu_{\mathrm{bare}} - 1} = 2.
-   $$
+#### 2. First-Order Condensation Transition & Exponent Dressing ($K = 1$)
 
-   Across $\Phi = 2$, the walker undergoes a first-order transition between a small-step Lévy phase ($\Phi < 2$) and a boundary-condensed ballistic phase ($\Phi > 2$) with $O(1)$ bimodal coexistence at $\Phi = 2$. Even below criticality ($\Phi < 2$), positive memory $J_1 > 0$ **dresses the apparent i.i.d. tail exponent** downward ($\hat{\mu}_{\mathrm{iid}} \approx \mu_{\mathrm{bare}} - J_1 \langle x \rangle_{\pi} < \mu_{\mathrm{bare}}$), biasing standard memoryless Clauset–Shalizi–Newman (CSN) fits toward the ballistic limit.
+The one-step chain is exactly solvable via a self-adjoint Hilbert–Schmidt transfer operator, yielding the explicit stationary marginal $\pi(x) \propto e^{h x} Z(h + J_1 x)$ and a **self-dual coexistence line** $h + \frac{1}{2} J_1 L = 0$, equivalently expressed through the dimensionless control parameter
 
-3. **Collective Self + Social Decomposition & Mean-Field Criticality**:
-   For $N$ simultaneous walkers with unit fixed effects $h_i$ and optional per-frame common-drive fixed effects $g_t$, the effective field decomposes into individual persistence and delayed neighbor coupling:
+$$
+\Phi \equiv \frac{J_1 L}{\mu_{\mathrm{bare}} - 1} = 2.
+$$
 
-   $$
-   \theta_{i,t} = h_i + g_t + \sum_{\tau=1}^{K_s} a_\tau x_{i,t-\tau} + \sum_{\tau=1}^{K_c} J_\tau \bar{x}_{\mathcal{N}_i(t),t-\tau}, \qquad \mathbf{H}_{i,t} = \mathbf{h}_i + \mathbf{g}_t + \sum_{\tau=1}^{K_s} a_\tau \mathbf{s}_{i,t-\tau} + \sum_{\tau=1}^{K_c} J_\tau \bar{\mathbf{s}}_{\mathcal{N}_i(t),t-\tau}.
-   $$
+Across $\Phi = 2$, the walker undergoes a first-order transition between a small-step Lévy phase ($\Phi < 2$) and a boundary-condensed ballistic phase ($\Phi > 2$) with $O(1)$ bimodal coexistence at $\Phi = 2$. Even below criticality ($\Phi < 2$), positive memory $J_1 > 0$ **dresses the apparent i.i.d. tail exponent** downward, $\hat\mu_{\mathrm{iid}} \approx \mu_{\mathrm{bare}} - J_1 \langle x \rangle_{\pi} < \mu_{\mathrm{bare}}$, biasing standard memoryless Clauset–Shalizi–Newman (CSN) fits toward the ballistic limit.
 
-   In the memoryless global limit ($a = 0$), the exact mean-field critical coupling is $J_c(0) = 12 / L^2$; self memory $a > 0$ amplifies single-agent susceptibility $\chi_{\mathrm{self}}(a) > L^2/12$ and lowers the collective ordering threshold $J_c(a) = 1 / \chi_{\mathrm{self}}(a) < 12/L^2$.
+#### 3. Collective Self + Social Decomposition & Mean-Field Criticality
 
-4. **Five Empirical Benchmarks**:
-   - **Individual walkers**: *Drosophila melanogaster* larvae ($10$ neural genotypes, $755$ tracks, $7.4 \times 10^4$ flights), *Syntermes dirus* termites ($76$ tracks, $3.9 \times 10^4$ flights), and murine $\mathrm{CD8}^+$ T cells in *Toxoplasma*-infected brain tissue ($996$ tracks).
-   - **Collective groups**: wild olive baboons (*Papio anubis*, $N = 25$ GPS collars at $1\text{ Hz}$) and homing pigeons (*Columba livia*, $29$ releases across $3$ flocks at $5\text{ Hz}$).
+For $N$ simultaneous walkers with unit fixed effects $h_i$ and optional per-frame common-drive fixed effects $g_t$, the effective field decomposes into individual persistence and delayed neighbor coupling:
+
+$$
+\theta_{i,t} = h_i + g_t + \sum_{\tau=1}^{K_s} a_\tau x_{i,t-\tau} + \sum_{\tau=1}^{K_c} J_\tau \bar{x}_{\mathcal{N}_i(t),t-\tau}, \qquad \mathbf{H}_{i,t} = \mathbf{h}_i + \mathbf{g}_t + \sum_{\tau=1}^{K_s} a_\tau \mathbf{s}_{i,t-\tau} + \sum_{\tau=1}^{K_c} J_\tau \bar{\mathbf{s}}_{\mathcal{N}_i(t),t-\tau}.
+$$
+
+In the memoryless global limit ($a = 0$), the exact mean-field critical coupling is $J_c(0) = 12 / L^2$; self memory $a > 0$ amplifies single-agent susceptibility $\chi_{\mathrm{self}}(a) > L^2/12$ and lowers the collective ordering threshold $J_c(a) = 1 / \chi_{\mathrm{self}}(a) < 12/L^2$.
+
+#### 4. Five Empirical Benchmarks
+
+- **Individual walkers**: *Drosophila melanogaster* larvae ($10$ neural genotypes, $755$ tracks, $7.4 \times 10^4$ flights), *Syntermes dirus* termites ($76$ tracks, $3.9 \times 10^4$ flights), and murine $\mathrm{CD8}^+$ T cells in *Toxoplasma*-infected brain tissue ($996$ tracks).
+- **Collective groups**: wild olive baboons (*Papio anubis*, $N = 25$ GPS collars at $1\ \mathrm{Hz}$) and homing pigeons (*Columba livia*, $29$ releases across $3$ flocks at $5\ \mathrm{Hz}$).
 
 ---
 
