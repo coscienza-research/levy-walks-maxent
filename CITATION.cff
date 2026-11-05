@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software or the accompanying manuscript in your research, please cite it as below."
+type: software
+title: "levy-walks-maxent: Dynamic Maximum-Entropy Inference for Individual and Collective Lévy Walks"
+version: 0.1.0
+date-released: 2026-04-20
+license: MIT
+repository-code: "https://github.com/andrea-ladiana/levy-walks-maxent"
+authors:
+  - family-names: "Barra"
+    given-names: "Adriano"
+    affiliation: "Dipartimento di Scienze di Base e Applicate per l'Ingegneria, Sapienza Università di Roma & INFN, Sezione di Roma"
+  - family-names: "Ladiana"
+    given-names: "Andrea"
+    affiliation: "Dipartimento di Fisica, Sapienza Università di Roma & INFN, Sezione di Roma"
+preferred-citation:
+  type: article
+  title: "Memory in Lévy walks from the dynamic-entropy formalism"
+  authors:
+    - family-names: "Barra"
+      given-names: "Adriano"
+    - family-names: "Ladiana"
+      given-names: "Andrea"
+  year: 2026
+  journal: "Physical Review E (submitted)"

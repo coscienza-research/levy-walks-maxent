@@ -1,0 +1,73 @@
+% =============================================================================
+%  Memory in Levy walks from the dynamic-entropy formalism
+%  A. Barra, A. Ladiana -- manuscript for Physical Review E (REVTeX 4.2)
+%
+%  Build:   pdflatex main && bibtex main && pdflatex main && pdflatex main
+%  Figures: scripts/make_figs.py (from ../results/*.json and data/*.json)
+% =============================================================================
+
+\documentclass[aps,pre,twocolumn,superscriptaddress,floatfix,longbibliography,nofootinbib]{revtex4-2}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{microtype}
+\definecolor{linkblue}{HTML}{2A3E78}
+\usepackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue]{hyperref}
+
+\newcommand{\lmin}{\ell_{\min}}
+\newcommand{\lmax}{\ell_{\max}}
+\newcommand{\Lang}{\mathcal{L}}
+\newcommand{\mub}{\mu_{\rm bare}}
+\newcommand{\Jup}{J_{\rm up}}
+\newcommand{\Jcond}{J_{\rm cond}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+
+\begin{document}
+
+\title{Memory in L\'evy walks from the dynamic-entropy formalism}
+
+\author{Adriano Barra}
+\affiliation{Istituto Nazionale d'Alta Matematica, GNFM, Rome, Italy}
+\affiliation{CNR-Nanotec, Unit\`a di Lecce, Lecce, Italy}
+\affiliation{Dipartimento di Scienze di Base e Applicate all'Ingegneria, Sapienza Universit\`a di Roma, Rome, Italy}
+\affiliation{Istituto Nazionale di Fisica Nucleare, Sezione di Roma 1, Rome, Italy}
+\author{Andrea Ladiana}
+\email[Corresponding author: ]{andrea.ladiana@uniroma1.it}
+\affiliation{Istituto Nazionale d'Alta Matematica, GNFM, Rome, Italy}
+\affiliation{Dipartimento di Scienze di Base e Applicate all'Ingegneria, Sapienza Universit\`a di Roma, Rome, Italy}
+
+\date{\today}
+
+% abstract: to be written once the text is final
+
+\maketitle
+
+\input{sections/01_intro}
+\input{sections/02_model}
+\input{sections/03_statmech}
+\input{sections/04_inference}
+\input{sections/05_data}
+\input{sections/06_discussion}
+
+\section*{Data availability}
+All trajectories analyzed in this work are publicly available~\cite{Sims2019,Castiblanco2019,Jerison2020,Crofoot2015data,MehlhausenFranks2025data}. The code that reproduces every analysis and figure will be made available upon publication.
+
+\begin{acknowledgments}
+We are grateful to the authors of Refs.~\cite{Sims2019,Castiblanco2019,Jerison2020,StrandburgPeshkin2015,MehlhausenFranks2025} for making their data public.
+\end{acknowledgments}
+
+\appendix
+\input{sections/A_appendices}
+
+\bibliography{refs}
+
+\end{document}

@@ -1,0 +1,65 @@
+# Byte-compiled / cache / packaging
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.installed.cfg
+*.egg
+build/
+dist/
+.eggs/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments & IDE
+.venv/
+venv/
+env/
+.idea/
+.vscode/
+.claude/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+.tmp.driveupload/
+
+# LaTeX build artifacts (keep paper/main.pdf and source files)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+paper/mainNotes.bib
+
+# Binary caches & execution logs
+results/cache/
+results/*.npz
+results/*.log
+results/*_log.txt
+results/*_prerevision.json
+
+# Local working directories & archived exploratory studies
+dc_dataset/
+dc_removed_from_paper/
+feasibility/
+figures/
+meeting_Adriano/
+report/
+report_dc/
+slides/
+slides_dc/
+sources/
+paper/archive/
+code/dc_*.py
+code/exp_dc_*.py
+code/make_dc_numbers.py
+code/plots_*.py
+code/plotstyle.py
+code/exp_baboons.py
+results/dc_*.json
