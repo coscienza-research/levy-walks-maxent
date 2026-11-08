@@ -1,4 +1,4 @@
-# Dynamic Maximum-Entropy Inference for Individual and Collective Lévy Walks
+# Memory in Biological Lévy Walks from the Dynamic-Entropy Formalism
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![NumPy / SciPy](https://img.shields.io/badge/backend-NumPy%20%7C%20SciPy-013243.svg)](https://scipy.org/)
@@ -7,8 +7,8 @@
 
 > **Reference Implementation & Reproducibility Suite**  
 > Accompanying the manuscript:  
-> *"Memory in Lévy walks from the dynamic-entropy formalism"*  
-> **Adriano Barra, Andrea Ladiana** — *Sapienza Università di Roma & INFN, Sezione di Roma*
+> *"Memory in biological Lévy walks from the dynamic-entropy formalism"*  
+> **Adriano Barra, Andrea Ladiana** — *INdAM-GNFM, CNR-Nanotec, Sapienza Università di Roma, INFN Sezione di Roma 1*
 
 ---
 
@@ -56,10 +56,16 @@ $$
 
 In the memoryless global limit ($a = 0$), the exact mean-field critical coupling is $J_c(0) = 12 / L^2$; self memory $a > 0$ amplifies single-agent susceptibility $\chi_{\mathrm{self}}(a) > L^2/12$ and lowers the collective ordering threshold $J_c(a) = 1 / \chi_{\mathrm{self}}(a) < 12/L^2$.
 
-#### 4. Five Empirical Benchmarks
+#### 4. Empirical Benchmarks Across Biological Scales
 
-- **Individual walkers**: *Drosophila melanogaster* larvae ($10$ neural genotypes, $755$ tracks, $7.4 \times 10^4$ flights), *Syntermes dirus* termites ($76$ tracks, $3.9 \times 10^4$ flights), and murine $\mathrm{CD8}^+$ T cells in *Toxoplasma*-infected brain tissue ($996$ tracks).
-- **Collective groups**: wild olive baboons (*Papio anubis*, $N = 25$ GPS collars at $1\ \mathrm{Hz}$) and homing pigeons (*Columba livia*, $29$ releases across $3$ flocks at $5\ \mathrm{Hz}$).
+- **Individual walkers (flight-clock dynamics)**:
+  - ***Drosophila melanogaster* larvae** (Sims et al. 2019): $10$ genotype–temperature conditions ($241$ tracks with $\ge 17$ flights, $2.1 \times 10^4$ flights) crawling on plain agar without sensory cues. Intrinsic memory of $1$–$4$ flights persists even with brain lobes and sensory neurons ablated, tracing memory to the locomotor central pattern generator (CPG).
+  - ***Cornitermes cumulans* termites** (Castiblanco et al. 2019, 2022): $75$ focal worker tracks ($2\ \mathrm{Hz}$ for $6\ \mathrm{h}$ in Petri dishes, median $3746$ flights/track). Every termite exhibits positive memory ($J_1 = 0.34 \pm 0.10$, median depth $4$) decaying over $\approx 5$ flights, ruling out renewal dynamics and confirming memory is not an artifact of thigmotaxis (wall-following).
+- **Collective groups (common frame clock)**:
+  - **Wild olive baboons** (*Papio anubis*, Strandburg-Peshkin et al. 2015, Crofoot et al. 2015): $26$ GPS-collared troop members tracked at $1\ \mathrm{Hz}$ across $14$ days ($10\ \mathrm{s}$ and $30\ \mathrm{s}$ analysis clocks). Shows delayed heading alignment ($J_1 \approx 0.45$ at $10\ \mathrm{s}$) that decays over a minute and is strongest toward nearest neighbors ahead along the group heading.
+  - **Homing pigeons** (*Columba livia*, Mehlhausen & Franks 2025): $3$ flocks across $41$ releases tracked at $1\ \mathrm{Hz}$. Demonstrates fast flock-wide directional and speed coupling with alternating-sign kernels that reflect both previous heading and turn rate.
+- **Negative controls (inter-individual heterogeneity & common drives)**:
+  - **T cells and *Dictyostelium*** (Jerison & Quake 2020): $1106$ tracks of zebrafish and mouse leukocytes and amoebae. Demonstrates that apparent heavy tails and multi-step memory in pooled data arise from cell-to-cell heterogeneity (absorbed by individual fixed effects $h_i$), while group-level speed coupling in zebrafish T cells ($16$ fish, $712$ cells, $8.5 \times 10^4$ steps) vanishes when frame-level common environmental drives ($g_t$) are accounted for.
 
 ---
 
@@ -86,11 +92,11 @@ In the memoryless global limit ($a = 0$), the exact mean-field critical coupling
 | :--- | :--- |
 | [`code/exp_synthetic.py`](code/exp_synthetic.py) | Synthetic validation benchmarks `S1`–`S6` (parameter recovery, CSN exponent bias, static heterogeneity vs. memory, finite-arena truncation, family misspecification, and fBm). |
 | [`code/exp_collective.py`](code/exp_collective.py) | Collective synthetic benchmarks `C1`–`C7` (mean-field susceptibility, self-memory critical shift, multi-lag NVAR vs. single-lag bias, delayed $k$-NN recovery, common-drive absorption, and joint speed–direction decouple). |
-| [`code/exp_drosophila.py`](code/exp_drosophila.py) | *Drosophila* larva analysis across all 10 genotypes: order selection, block-field controls, segmentation robustness, and empirical condensation index $\Phi$. |
-| [`code/exp_termites.py`](code/exp_termites.py) | *Syntermes dirus* termite trail analysis: radial core-vs-wall partitioning, block fixed effects, and step–angle factorization. |
-| [`code/exp_tcells.py`](code/exp_tcells.py) | 3D murine $\mathrm{CD8}^+$ T-cell motility analysis (control vs. anti-CXCL10 blockade) with pooled permutation tests. |
-| [`code/exp_realgroups.py`](code/exp_realgroups.py) | Collective self + social inference on GPS baboon troops and homing pigeon flocks. |
-| [`code/exp_collective_real.py`](code/exp_collective_real.py) | Negative-control collective tests on solo *Drosophila* plates and dense 3D T-cell recordings (plus ROCK-inhibited tracks). |
+| [`code/exp_drosophila.py`](code/exp_drosophila.py) | *Drosophila* larva analysis across 10 genotype–temperature conditions: order selection, block-field controls, segmentation robustness, and empirical condensation index $\Phi$. |
+| [`code/exp_termites.py`](code/exp_termites.py) | *Cornitermes cumulans* termite analysis across 75 focal workers: order selection, thigmotaxis (wall-proximity) controls, and block fixed effects. |
+| [`code/exp_tcells.py`](code/exp_tcells.py) | T-cell and *Dictyostelium* motility analysis (Jerison & Quake 2020): negative control demonstrating that apparent heavy tails and memory stem from cell-to-cell heterogeneity (pooled common field vs. unit fixed effects $h_i$). |
+| [`code/exp_realgroups.py`](code/exp_realgroups.py) | Collective self + social inference on GPS baboon troops (10 s and 30 s clocks) and homing pigeon flocks (1 s clock), with rank-distance decay and ahead/behind asymmetry. |
+| [`code/exp_collective_real.py`](code/exp_collective_real.py) | Negative-control collective tests on in vivo zebrafish T cells (displacement per 45 s frame) and co-recorded *Drosophila* arenas with time-shift surrogates and time fixed effects $g_t$. |
 | [`code/test_core.py`](code/test_core.py), [`code/test_collective.py`](code/test_collective.py), [`code/test_dir_fe.py`](code/test_dir_fe.py) | Automated `pytest` verification suite covering closed-form partitions, finite-difference gradients/Hessians, exact $K=1$ stationary densities, collective fixed effects, and mean-field criticality. |
 
 ### Figure Pipeline & Precomputed Outputs (`paper/` & `results/`)
@@ -109,7 +115,7 @@ In the memoryless global limit ($a = 0$), the exact mean-field critical coupling
 Clone the repository and install the package in editable mode (Python $\ge 3.10$):
 
 ```bash
-git clone https://github.com/andrea-ladiana/levy-walks-maxent.git
+git clone https://github.com/coscienza-research/levy-walks-maxent.git
 cd levy-walks-maxent
 
 # Standard installation
@@ -221,7 +227,7 @@ python paper/scripts/compute.py all
 
 ### Running the Empirical Benchmark Pipelines
 
-If you have downloaded the raw empirical trajectory datasets (Sims et al. 2019 *Drosophila* larvae, Cristaldo et al. 2015 *Syntermes dirus* termites, Harris et al. 2012 $\mathrm{CD8}^+$ T cells, Crofoot et al. 2015 olive baboons, and Nagy et al. 2010 homing pigeons), point `LEVY_DATA_DIR` to the dataset root directory and run:
+If you have downloaded the raw empirical trajectory datasets (Sims et al. 2019 *Drosophila* larvae, Castiblanco et al. 2019 *Cornitermes cumulans* termites, Jerison & Quake 2020 T cells and *Dictyostelium*, Strandburg-Peshkin et al. / Crofoot et al. 2015 olive baboons, and Mehlhausen & Franks 2025 homing pigeons), point `LEVY_DATA_DIR` to the dataset root directory and run:
 
 ```bash
 export LEVY_DATA_DIR=/path/to/Levy-walks   # PowerShell: $env:LEVY_DATA_DIR="C:\path\to\Levy-walks"
@@ -270,7 +276,7 @@ If you use this code or build upon the dynamic maximum-entropy framework for Lé
 
 ```bibtex
 @article{barra2026memory,
-  title   = {Memory in {L}{\'e}vy walks from the dynamic-entropy formalism},
+  title   = {Memory in biological {L}{\'e}vy walks from the dynamic-entropy formalism},
   author  = {Barra, Adriano and Ladiana, Andrea},
   journal = {Physical Review E (submitted)},
   year    = {2026}

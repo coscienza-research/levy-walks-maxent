@@ -48,7 +48,7 @@ dev = [
 ]
 
 [project.urls]
-Repository = "https://github.com/andrea-ladiana/levy-walks-maxent"
+Repository = "https://github.com/coscienza-research/levy-walks-maxent"
 
 [tool.setuptools]
 package-dir = {"" = "code"}

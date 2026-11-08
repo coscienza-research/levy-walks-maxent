@@ -5,7 +5,7 @@ title: "levy-walks-maxent: Dynamic Maximum-Entropy Inference for Individual and 
 version: 0.1.0
 date-released: 2026-04-20
 license: MIT
-repository-code: "https://github.com/andrea-ladiana/levy-walks-maxent"
+repository-code: "https://github.com/coscienza-research/levy-walks-maxent"
 authors:
   - family-names: "Barra"
     given-names: "Adriano"
@@ -15,7 +15,7 @@ authors:
     affiliation: "Dipartimento di Fisica, Sapienza Università di Roma & INFN, Sezione di Roma"
 preferred-citation:
   type: article
-  title: "Memory in Lévy walks from the dynamic-entropy formalism"
+  title: "Memory in biological Lévy walks from the dynamic-entropy formalism"
   authors:
     - family-names: "Barra"
       given-names: "Adriano"
