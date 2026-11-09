@@ -6,8 +6,8 @@ import panels as P
 
 def make():
     f = S.fig(S.FULL, 50)
-    gs = f.add_gridspec(1, 4, width_ratios=[1.3, 1, 1, 0.95], left=0.01, right=0.985, top=0.86, bottom=0.2,
-                        wspace=0.5)
+    gs = f.add_gridspec(1, 4, width_ratios=[1.45, 1.0, 0.98, 0.92], left=0.01, right=0.985, top=0.86, bottom=0.2,
+                        wspace=0.46)
     axA = f.add_subplot(gs[0, 0]); P.self_social_schematic(axA)
     axB = f.add_subplot(gs[0, 1]); P.aggregation(axB)
     axC = f.add_subplot(gs[0, 2]); P.mf_phase(axC)

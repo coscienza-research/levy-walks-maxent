@@ -27,10 +27,9 @@ def langevin_response(ax):
     ax.plot(y, 3 * langevin_prime(y / 2), color=S.MUTED, lw=1.0, ls=(0, (3, 1.5)))
     ax.set_xlim(-24, 24); ax.set_ylim(-0.02, 1.05)
     ax.set_xticks([-20, -10, 0, 10, 20])
-    ax.set_xlabel(r"$\theta L$")
+    ax.set_xlabel(r"$\theta L = (1-\mu)L$")
     S.text(ax, 23, 0.86, r"$\langle x\rangle/L$", c=S.INDIGO, fontsize=6.4, ha="right", va="top")
-    S.text(ax, -23.5, 0.76, r"$12\,\mathrm{Var}(x)/L^2$", c=S.MUTED, fontsize=6.0, va="center", ha="left")
-    S.text(ax, 23, 0.22, r"$\theta=1-\mu$", c=S.INK2, fontsize=6.0, ha="right")
+    S.text(ax, -3.5, 0.88, r"$12\,\mathrm{Var}(x)/L^2$", c=S.MUTED, fontsize=6.0, ha="right", va="center")
     S.despine(ax)
 
 
@@ -77,7 +76,6 @@ def dressed_exponent(ax):
     ax.set_xticks([0, 1, 2, 3]); ax.set_yticks([-1, 0, 1, 2])
     ax.set_xlabel(r"$\Phi=J_1L/(\mu_{\rm bare}-1)$")
     ax.set_ylabel(r"histogram exponent $\hat\mu$")
-    S.text(ax, 3.15, 2.07, r"$\mu_{\rm bare}=2$", c=S.INK2, fontsize=5.8, ha="right", va="bottom")
     S.despine(ax)
 
 
@@ -152,6 +150,9 @@ def larvae_robustness(ax, labels=True):
     ax.set_xticks(xs)
     ax.set_xticklabels(["0.25\n0.5", "0.5\n0.5", "0.5\n1", "0.5\n2", "1\n2", "50", "25"], fontsize=5.7)
     ax.tick_params(axis="x", length=0, pad=1.5)
+    for k, lab in enumerate([r"$\varepsilon$", r"$\ell_{\min}$"]):      # names of the two rows of tick labels
+        ax.annotate(lab, xy=(-0.55, 0), xycoords=("data", "axes fraction"), xytext=(0, -5.0 - 6.85 * k),
+                    textcoords="offset points", ha="right", va="center", fontsize=5.7, color=S.INK2)
     ax.text(2.0, ys[0] + 0.95, r"segmentation $\varepsilon$, $\ell_{\min}$ (mm)", ha="center", va="center",
             fontsize=6.0, color=S.INK2)
     ax.text(5.9, ys[0] + 0.95, "field per block", ha="center", va="center", fontsize=6.0, color=S.INK2)
@@ -220,7 +221,7 @@ def dressing_scatter(ax):
     S.text(ax, 2.25, 2.31, "no memory", c=S.MUTED, fontsize=5.6, ha="right", va="bottom", rotation=45,
            rotation_mode="anchor")
     S.text(ax, 2.95, 1.12, "termites", c=S.OCHRE, fontsize=6.0, ha="right")
-    S.text(ax, 1.05, 2.95, "larvae", c=S.INDIGO, fontsize=6.0, ha="left", va="top")
+    S.text(ax, 1.05, 1.85, "larvae", c=S.INDIGO, fontsize=6.0, ha="left", va="top")
     S.despine(ax)
 
 
@@ -277,37 +278,41 @@ def _arrow(ax, p, q, c, lw=0.8, rad=0.0, ms=5):
 
 
 def self_social_schematic(ax):
-    ax.set_xlim(0, 12.6); ax.set_ylim(0, 7.2); ax.set_aspect("equal"); ax.axis("off")
-    n = 6; s0 = 0.62; x0, y0 = 0.35, 1.25
+    ax.set_xlim(0, 14.8); ax.set_ylim(-0.8, 7.4); ax.set_aspect("equal"); ax.axis("off")
+    n = 6; s0 = 0.54; x0, y0 = 0.5, 2.45
     for i in range(n):
         for j in range(n):
             c = S.INDIGO if i == j else S.mix(S.PLUM, 0.35)
-            ax.add_patch(Rectangle((x0 + j * s0, y0 + (n - 1 - i) * s0), s0 * 0.92, s0 * 0.92, color=c, lw=0))
+            ax.add_patch(Rectangle((x0 + j * s0, y0 + (n - 1 - i) * s0), s0 * 0.90, s0 * 0.90, color=c, lw=0))
     ax.text(x0 + n * s0 / 2, y0 + n * s0 + 0.35, r"$\langle x_i^t\,x_j^{t-\tau}\rangle$", ha="center",
-            va="bottom", fontsize=6.4, color=S.INK)
-    ax.text(x0 - 0.15, y0 + n * s0 / 2, r"$i$", ha="right", va="center", fontsize=6.2, color=S.INK2)
-    ax.text(x0 + n * s0 / 2, y0 - 0.15, r"$j$", ha="center", va="top", fontsize=6.2, color=S.INK2)
-    ax.text(x0 + n * s0 + 0.18, y0 + 0.31, "own " + r"$A(\tau)$", color=S.INDIGO, fontsize=5.8, ha="left",
-            va="center")
-    ax.text(x0 + n * s0 / 2, 0.05, r"others' $S(\tau)$", color=S.PLUM, fontsize=5.8, ha="center", va="center")
-    cx, cy = 9.0, 3.6
-    _node(ax, cx, cy, 0.62, r"$x_i^t$", S.INK, "#FFFFFF", fs=6.4)
-    for k, (dx, lab) in enumerate([(-2.4, r"$x_i^{t-1}$"), (-4.0, r"$x_i^{t-2}$")]):
-        _node(ax, cx + dx, cy, 0.55, lab, S.INDIGO, S.mix(S.INDIGO, 0.12), fs=5.6)
-        _arrow(ax, (cx + dx + 0.55, cy + (0.0 if k == 0 else 0.25)), (cx - 0.62, cy + (0.0 if k == 0 else 0.15)),
-               S.INDIGO, rad=0.0 if k == 0 else -0.35)
-    ax.text(cx - 1.55, cy - 0.32, r"$a_1$", color=S.INDIGO, fontsize=6.0, ha="center", va="top")
-    ax.text(cx - 2.6, cy + 1.15, r"$a_2$", color=S.INDIGO, fontsize=6.0, ha="center", va="bottom")
-    for dx in [-1.3, 0.0, 1.3]:
-        _node(ax, cx + dx, cy + 2.55, 0.42, "", S.PLUM, S.mix(S.PLUM, 0.15))
-        _arrow(ax, (cx + dx * 0.9, cy + 2.13), (cx + dx * 0.25, cy + 0.6), S.PLUM)
-    ax.text(cx + 1.85, cy + 2.55, r"$x_j^{t-\tau}$", color=S.PLUM, fontsize=5.8, ha="left", va="center")
-    ax.text(cx + 0.95, cy + 1.25, r"$J_\tau$", color=S.PLUM, fontsize=6.0, ha="left", va="center")
-    for dx, lab in [(-0.75, r"$h_i$"), (0.75, r"$g_t$")]:
-        ax.add_patch(FancyBboxPatch((cx + dx - 0.42, cy - 2.55), 0.84, 0.62, boxstyle="round,pad=0.02,rounding_size=0.12",
+            va="bottom", fontsize=6.6, color=S.INK)
+    ax.text(x0 - 0.20, y0 + n * s0 / 2, r"$i$", ha="right", va="center", fontsize=6.2, color=S.INK2)
+    ax.text(x0 + n * s0 / 2, y0 - 0.10, r"$j$", ha="center", va="top", fontsize=6.2, color=S.INK2)
+    leg_y1, leg_y2 = y0 - 1.30, y0 - 1.90
+    ax.add_patch(Rectangle((x0 + 0.1, leg_y1 - 0.15), 0.32, 0.32, color=S.INDIGO, lw=0))
+    ax.text(x0 + 0.55, leg_y1, r"own $A(\tau)$", color=S.INDIGO, fontsize=5.8, ha="left", va="center")
+    ax.add_patch(Rectangle((x0 + 0.1, leg_y2 - 0.15), 0.32, 0.32, color=S.mix(S.PLUM, 0.45), lw=0))
+    ax.text(x0 + 0.55, leg_y2, r"others' $S(\tau)$", color=S.PLUM, fontsize=5.8, ha="left", va="center")
+    cx, cy = 10.6, 3.7
+    _node(ax, cx, cy, 0.80, r"$x_i^t$", S.INK, "#FFFFFF", fs=6.6, lw=0.9)
+    # own past: radius 0.80 with font 5.1 so formulas fit comfortably without clipping
+    _node(ax, cx - 2.85, cy, 0.80, r"$x_i^{t-1}$", S.INDIGO, S.mix(S.INDIGO, 0.12), fs=5.1)
+    _arrow(ax, (cx - 2.85 + 0.80, cy), (cx - 0.80, cy), S.INDIGO, rad=0.0)
+    ax.text(cx - 1.80, cy - 0.38, r"$a_1$", color=S.INDIGO, fontsize=6.2, ha="center", va="top")
+    _node(ax, cx - 5.35, cy, 0.80, r"$x_i^{t-2}$", S.INDIGO, S.mix(S.INDIGO, 0.12), fs=5.1)
+    _arrow(ax, (cx - 5.35 + 0.80, cy + 0.25), (cx - 0.80, cy + 0.25), S.INDIGO, rad=-0.38)
+    ax.text(cx - 3.55, cy + 1.40, r"$a_2$", color=S.INDIGO, fontsize=6.2, ha="center", va="bottom")
+    # others' past: title centered right above the three circles
+    ax.text(cx, cy + 3.15, r"others' past $x_j^{t-\tau}$", color=S.PLUM, fontsize=5.8, ha="center", va="bottom")
+    for dx in [-1.35, 0.0, 1.35]:
+        _node(ax, cx + dx, cy + 2.45, 0.46, "", S.PLUM, S.mix(S.PLUM, 0.15))
+        _arrow(ax, (cx + dx * 0.85, cy + 1.98), (cx + dx * 0.25, cy + 0.80), S.PLUM)
+    ax.text(cx + 1.15, cy + 1.45, r"$J_\tau$", color=S.PLUM, fontsize=6.2, ha="left", va="center")
+    for dx, lab in [(-0.88, r"$h_i$"), (0.88, r"$g_t$")]:
+        ax.add_patch(FancyBboxPatch((cx + dx - 0.45, cy - 2.75), 0.90, 0.62, boxstyle="round,pad=0.02,rounding_size=0.12",
                                     facecolor=S.mix(S.TEAL, 0.15), edgecolor=S.TEAL, lw=0.7, zorder=3))
-        ax.text(cx + dx, cy - 2.24, lab, color=S.TEAL, fontsize=6.0, ha="center", va="center", zorder=4)
-        _arrow(ax, (cx + dx * 0.9, cy - 1.93), (cx + dx * 0.3, cy - 0.6), S.TEAL)
+        ax.text(cx + dx, cy - 2.44, lab, color=S.TEAL, fontsize=6.2, ha="center", va="center", zorder=4)
+        _arrow(ax, (cx + dx * 0.85, cy - 2.13), (cx + dx * 0.3, cy - 0.80), S.TEAL)
     ax.text(cx, cy - 3.25, "unit / frame fields", color=S.TEAL, fontsize=5.6, ha="center", va="center")
 
 
@@ -330,7 +335,8 @@ def aggregation(ax, inset=True):
     ax.set_ylabel(r"social coupling $J_\tau$")
     S.text(ax, 8.45, 0.59, "group average:\noriginal (open), exact (filled)", c=S.CORAL, fontsize=5.6, va="top",
            ha="right", linespacing=1.05)
-    S.text(ax, 3.3, 0.235, "predicted", c=S.INK2, fontsize=5.8, va="center")
+    # Predicted label placed along the dashed curve, completely away from the inset
+    S.text(ax, 1.45, 0.36, "predicted", c=S.INK2, fontsize=5.8, ha="left", va="bottom")
     S.text(ax, 0.65, -0.145, "self + social", c=S.PLUM, fontsize=5.8, ha="left", va="center")
     S.despine(ax)
     if not inset:
@@ -357,27 +363,35 @@ def common_drives(ax_rate, ax_J):
     rates = [np.mean([p["tauM"] > 0 for p in no.pre]), np.mean([p["sel"][1] > 0 for p in no["global"]]),
              np.mean([p["sel"][1] > 0 for p in no["local"]]), np.mean([p["sel"][1] > 0 for p in no["local_tfe"]])]
     ax = ax_rate
-    ax.bar(range(4), rates, color=[S.CORAL, S.CORAL, S.CORAL, S.PLUM], width=0.62)
-    ax.text(3, 0.03, "0", ha="center", va="bottom", fontsize=6.2, color=S.PLUM)
-    ax.set_xticks(range(4)); ax.set_xticklabels(["avg.", "glob.", "local", "local\n+ $g_t$"], fontsize=5.4)
+    ax.bar(range(4), rates, color=[S.CORAL, S.CORAL, S.CORAL, S.PLUM], width=0.58, zorder=2)
+    ax.set_xticks(range(4)); ax.set_xticklabels(["group\navg.", "global", "local", "local\n+ $g_t$"], fontsize=5.6)
     ax.get_xticklabels()[3].set_color(S.PLUM)
     ax.tick_params(axis="x", length=0, pad=1.5)
     ax.set_ylabel("social coupling declared")
     ax.yaxis.set_major_formatter(mpl.ticker.PercentFormatter(1.0, decimals=0))
-    ax.set_ylim(0, 1.22); ax.set_yticks([0, 0.5, 1.0])
-    S.text(ax, 1.5, 1.2, "no interaction", c=S.INK2, fontsize=5.6, ha="center", va="top")
+    ax.set_ylim(0, 1.15); ax.set_yticks([0, 0.5, 1.0])
+    for k in range(3):
+        ax.text(k, 1.02, "100%", ha="center", va="bottom", fontsize=5.6, color=S.INK2)
+    ax.text(3, 0.02, "0%", ha="center", va="bottom", fontsize=5.8, color=S.PLUM, fontweight="bold")
     S.despine(ax)
     ax = ax_J
     J_loc = np.array([p["J4"][1] for p in yes["local"]]); J_tfe = np.array([p["J4"][1] for p in yes["local_tfe"]])
-    ax.axhline(0.3, color=S.INK, lw=0.7, ls=(0, (3, 2)))
-    for x, v, c in [(0, J_loc, S.CORAL), (1, J_tfe, S.PLUM)]:
-        ax.errorbar(x, v.mean(), yerr=v.std(), fmt="o", color=c, ms=3.2, elinewidth=0.8)
-    ax.set_xlim(-0.6, 1.6); ax.set_ylim(0, 0.5)
+    ax.axhline(0.3, color=S.INK, lw=0.7, ls=(0, (3, 2)), zorder=1)
+    np.random.seed(42)
+    jit0 = np.random.normal(0, 0.045, size=len(J_loc))
+    jit1 = np.random.normal(0, 0.045, size=len(J_tfe))
+    ax.scatter(0 + jit0, J_loc, s=9, color=S.CORAL, alpha=0.35, edgecolors="none", zorder=2)
+    ax.scatter(1 + jit1, J_tfe, s=9, color=S.PLUM, alpha=0.35, edgecolors="none", zorder=2)
+    ax.errorbar(0, J_loc.mean(), yerr=J_loc.std(), fmt="o", color=S.CORAL, ms=3.8,
+                elinewidth=1.0, capsize=2.0, capthick=0.8, zorder=3)
+    ax.errorbar(1, J_tfe.mean(), yerr=J_tfe.std(), fmt="o", color=S.PLUM, ms=3.8,
+                elinewidth=1.0, capsize=2.0, capthick=0.8, zorder=3)
+    ax.set_xlim(-0.55, 1.55); ax.set_ylim(0.18, 0.52); ax.set_yticks([0.2, 0.3, 0.4, 0.5])
     ax.set_xticks([0, 1]); ax.set_xticklabels(["local", "local\n+ $g_t$"], fontsize=5.8)
     ax.get_xticklabels()[1].set_color(S.PLUM)
     ax.tick_params(axis="x", length=0, pad=1.5)
-    ax.set_ylabel(r"inferred $J_2$")
-    S.text(ax, 1.58, 0.31, "planted", c=S.INK2, fontsize=5.6, ha="right", va="bottom")
+    ax.set_ylabel(r"inferred coupling $J_2$")
+    S.text(ax, 1.50, 0.308, "planted", c=S.INK2, fontsize=5.6, ha="right", va="bottom")
     S.despine(ax)
 
 
@@ -404,9 +418,11 @@ def mf_phase(ax):
     ax.annotate("bistable\n(stop-and-go)", xy=(2.55, 0.25), xytext=(2.05, 2.35), color=S.PLUM, fontsize=5.8,
                 ha="center", va="center", linespacing=1.05,
                 arrowprops=dict(arrowstyle="-", color=S.PLUM, lw=0.6, shrinkA=1, shrinkB=0))
-    ax.annotate("oscillating", xy=(-2.3, -0.6), xytext=(-1.25, -2.6), color=S.PLUM, fontsize=5.8, ha="center",
+    # Oscillating: placed neatly in white space to the right of dashed line, arrow pointing into shaded zone
+    ax.annotate("oscillating", xy=(-2.2, -1.0), xytext=(-0.85, -2.4), color=S.PLUM, fontsize=5.8, ha="center",
                 va="center", arrowprops=dict(arrowstyle="-", color=S.PLUM, lw=0.6, shrinkA=1, shrinkB=0))
-    S.text(ax, 0.0, 2.9, "one steady\nstate", c=S.INK2, fontsize=5.8, ha="center", va="center", linespacing=1.0)
+    # One steady state: clearly centered in the central white region above the origin
+    S.text(ax, 0.0, 1.15, "one steady\nstate", c=S.INK2, fontsize=5.8, ha="center", va="center", linespacing=1.0)
     S.despine(ax)
 
 
@@ -446,26 +462,29 @@ def mf_fluctuations(ax):
     Jc, _, _ = critical_point(L)
     fr = np.linspace(-0.97, 0.97, 300)
     lp0 = L ** 2 / 12
-    ax.plot(fr, lp0 / (1 - fr ** 2), color=S.INK2, lw=1.0)
+    l_black, = ax.plot(fr, lp0 / (1 - fr ** 2), color=S.INK2, lw=1.1, zorder=2)
     a = 0.2
     R_, Cs, _ = unit_response(-a * L / 2, a, L)
     fc = 1.0 / R_.sum() / Jc
     fe = np.linspace(-0.97, 0.985 * fc, 300)
-    ax.plot(fe, [nvar_linear_response(v * Jc, R_, Cs) for v in fe], color=S.INDIGO, lw=1.0)
-    ax.axvline(fc, color=S.INDIGO, lw=0.6, ls=(0, (1.2, 1.2)))
+    l_blue, = ax.plot(fe, [nvar_linear_response(v * Jc, R_, Cs) for v in fe], color=S.INDIGO, lw=1.1, zorder=2)
+    ax.axvline(fc, color=S.INDIGO, lw=0.7, ls=(0, (1.5, 1.5)), zorder=1)
     df = pd.DataFrame(res("collective_C6.json"))
     df["frac"] = df.par.apply(lambda p: p["frac"]); df["a"] = df.par.apply(lambda p: p["a"])
-    for a_, col, mk in [(0.0, S.INK2, "o"), (0.2, S.INDIGO, "s")]:
+    for a_, col, mk, mfc in [(0.0, S.INK2, "o", "white"), (0.2, S.INDIGO, "s", S.INDIGO)]:
         q = df[df.a == a_].groupby("frac").NVar.agg(["mean", "std"]).reset_index()
         bist = (a_ > 0) & (q.frac > fc)
-        ax.errorbar(q.frac[~bist], q["mean"][~bist], yerr=q["std"][~bist], fmt=mk, color=col, ms=2.8,
-                    mfc="white" if a_ == 0 else col, mew=0.7, elinewidth=0.7)
+        ax.errorbar(q.frac[~bist], q["mean"][~bist], yerr=q["std"][~bist], fmt=mk, color=col, ms=3.0,
+                    mfc=mfc, mew=0.7, elinewidth=0.7, zorder=3)
     ax.set_yscale("log"); ax.set_ylim(1.0, 120); ax.set_xlim(-1.0, 1.0)
-    ax.set_xlabel(r"$J/J_c$ on $\tilde\theta=0$")
-    ax.set_ylabel(r"$N\,\mathrm{Var}(m_t)$")
-    S.text(ax, fc - 0.08, 100, r"$J_c(a)=0.71J_c$", c=S.INDIGO, fontsize=5.7, ha="right", va="center")
-    S.text(ax, -0.55, 3.4, "no own memory", c=S.INK2, fontsize=5.7, ha="left", va="center")
-    S.text(ax, -0.97, 1.2, r"own memory $a=0.2$", c=S.INDIGO, fontsize=5.7, ha="left", va="center")
+    ax.set_xlabel(r"delayed coupling $J/J_c$ on $\tilde\theta=0$")
+    ax.set_ylabel(r"fluctuations $N\,\mathrm{Var}(m_t)$")
+    S.text(ax, fc - 0.04, 75, r"$J_c(a)=0.71J_c$", c=S.INDIGO, fontsize=5.8, ha="right", va="center")
+    p_circ = ax.plot([], [], "o", color=S.INK2, mfc="white", ms=3.0, mew=0.7)[0]
+    p_sq = ax.plot([], [], "s", color=S.INDIGO, mfc=S.INDIGO, ms=3.0)[0]
+    ax.legend([(l_black, p_circ), (l_blue, p_sq)],
+              ["no own memory ($a=0$)", r"own memory ($a=0.2$)"],
+              loc="upper left", bbox_to_anchor=(0.02, 0.98), frameon=False, fontsize=5.8)
     S.despine(ax)
 
 

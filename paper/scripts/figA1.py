@@ -10,7 +10,7 @@ def make():
     axs = [f.add_subplot(gs[0, k]) for k in range(3)]
     P.langevin_response(axs[0]); P.crossing(axs[1]); P.dressed_exponent(axs[2])
     S.heads(f, [(axs[0], "(a)", "one flight"), (axs[1], "(b)", "condensation"),
-                (axs[2], "(c)", "dressed exponent")], one_row=True)
+                (axs[2], "(c)", r"dressed exponent ($\mu_{\rm bare}=2$)" )], one_row=True)
     S.save(f, "figA1_theory")
 
 

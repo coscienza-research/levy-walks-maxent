@@ -53,6 +53,7 @@ results/*_log.txt
 results/*_prerevision.json
 
 # Local working directories and exploratory scripts
+submission-PRE/
 dc_dataset/
 dc_removed_from_paper/
 feasibility/

@@ -13,19 +13,31 @@ def make():
     xy, lens, st = larva_track()
     xy = np.column_stack([xy[:, 1], -xy[:, 0]])          # rotated: long axis horizontal
     axa = f.add_subplot(gs[0, 0])
-    # raw positions in light grey, flights as dark straight segments, turns as dots: readable in grey scale
     ends = list(st) + [len(xy) - 1]
-    axa.plot(xy[:, 0], xy[:, 1], color="#C9C8C2", lw=0.5, zorder=1)
-    for a_, b_ in zip(ends[:-1], ends[1:]):
-        axa.plot(*np.c_[xy[a_], xy[b_]], color=S.INK, lw=0.75, zorder=2, solid_capstyle="round")
+    axa.plot(xy[:, 0], xy[:, 1], color="#E2E1DC", lw=0.45, zorder=1)
+    cmap_a = plt.cm.viridis
+    norm_a = LogNorm(vmin=1.0, vmax=20.0)
+    for i in np.argsort(lens):
+        a_, b_ = ends[i], ends[i + 1]
+        c_ = cmap_a(norm_a(np.clip(lens[i], 1.0, 20.0)))
+        axa.plot([xy[a_, 0], xy[b_, 0]], [xy[a_, 1], xy[b_, 1]], color=c_, lw=0.85, zorder=2,
+                 solid_capstyle="round")
     tp = xy[ends]
-    axa.scatter(tp[:, 0], tp[:, 1], s=2.2, color=S.INK, lw=0, zorder=3)
+    axa.scatter(tp[:, 0], tp[:, 1], s=1.8, color=S.INK2, lw=0, zorder=3, alpha=0.55)
     axa.set_aspect("equal"); axa.axis("off")
     x0, x1 = axa.get_xlim(); y0, y1 = axa.get_ylim()
-    axa.set_ylim(y0 - 0.30 * (y1 - y0), y1)
+    axa.set_ylim(y0 - 0.32 * (y1 - y0), y1)
     yb = y0 - 0.20 * (y1 - y0)
     axa.plot([x0 + 1, x0 + 21], [yb, yb], color=S.INK, lw=1.1, solid_capstyle="butt")
     S.text(axa, x0 + 11, yb + 2.0, "20 mm", ha="center", va="bottom", fontsize=5.8)
+    # colorbar for flight lengths
+    cax_a = axa.inset_axes([0.42, 0.08, 0.52, 0.05])
+    cb_a = f.colorbar(mpl.cm.ScalarMappable(norm=norm_a, cmap=cmap_a), cax=cax_a, orientation="horizontal")
+    cb_a.outline.set_visible(False)
+    cb_a.set_ticks([1, 2, 5, 10, 20])
+    cb_a.set_ticklabels(["1", "2", "5", "10", "20"])
+    cax_a.tick_params(labelsize=5.4, length=1.4, pad=1.0, color=S.AXIS)
+    cax_a.set_title(r"flight length $\ell$ (mm)", fontsize=5.8, color=S.INK2, pad=2.5, loc="left")
 
     # ------------------------------------------------ (b) flights as spins in time
     axb = f.add_subplot(gs[1, 0])
