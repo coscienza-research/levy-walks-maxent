@@ -1,4 +1,5 @@
 # Bytecode, caches, and packaging
+*.zip
 __pycache__/
 *.py[cod]
 *$py.class
